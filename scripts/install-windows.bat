@@ -10,12 +10,12 @@ REM ============================================================================
 setlocal EnableDelayedExpansion
 
 REM ─── Configuration ─────────────────────────────────────────────────────────
-set "VERSION=v0.1.0"
+set "VERSION=v0.0.1"
 set "GITHUB_REPO=PromptProwl/silentguard-releases"
 
 REM Repo is public, so no PAT is needed
 
-set "BINARY_NAME=silentguard-engine-windows.exe"
+set "BINARY_NAME=silentguard-windows.exe"
 set "ASSET_URL=https://api.github.com/repos/%GITHUB_REPO%/releases/tags/%VERSION%"
 
 REM Chrome extension ID that will talk to this host

@@ -10,10 +10,10 @@
 set -euo pipefail
 
 # ─── Configuration ───────────────────────────────────────────────────────────
-VERSION="${SILENTGUARD_VERSION:-v0.1.0}"
+VERSION="${SILENTGUARD_VERSION:-v0.0.1}"
 GITHUB_REPO="PromptProwl/silentguard-releases"
 # Repo is public, so no PAT is needed
-BINARY_NAME="silentguard-engine-mac"
+BINARY_NAME="silentguard-mac"
 ASSET_URL="https://api.github.com/repos/${GITHUB_REPO}/releases/tags/${VERSION}"
 
 # Chrome extension ID that will talk to this host
