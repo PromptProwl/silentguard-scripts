@@ -12,13 +12,12 @@ set -euo pipefail
 # ─── Configuration ───────────────────────────────────────────────────────────
 VERSION="${SILENTGUARD_VERSION:-v0.1.0}"
 GITHUB_REPO="PromptProwl/silentguard-releases"
-GITHUB_PAT="PASTE_YOUR_PAT_HERE"                 # ← hardcode your read-only PAT
-
+# Repo is public, so no PAT is needed
 BINARY_NAME="silentguard-engine-mac"
 ASSET_URL="https://api.github.com/repos/${GITHUB_REPO}/releases/tags/${VERSION}"
 
 # Chrome extension ID that will talk to this host
-CHROME_EXTENSION_ID="YOUR_CHROME_EXTENSION_ID"   # ← replace with real ID
+CHROME_EXTENSION_ID="cmhlaimhneoganidnfcodmplhfeoball"
 
 # Hugging Face model coordinates
 EMBEDDING_REPO="gpahal/bge-m3-onnx-int8"
@@ -76,7 +75,6 @@ echo ""
 info "Fetching release metadata for ${VERSION} from ${GITHUB_REPO}..."
 
 RELEASE_JSON=$(curl -sSL \
-    -H "Authorization: token ${GITHUB_PAT}" \
     -H "Accept: application/vnd.github+json" \
     "${ASSET_URL}")
 
@@ -88,7 +86,6 @@ DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r \
 info "Downloading ${BINARY_NAME}..."
 DOWNLOAD_DEST="${CACHE_DIR}/${BINARY_NAME}"
 curl -SL --progress-bar \
-    -H "Authorization: token ${GITHUB_PAT}" \
     -H "Accept: application/octet-stream" \
     "$DOWNLOAD_URL" \
     -o "$DOWNLOAD_DEST"
@@ -102,7 +99,6 @@ CHECKSUM_URL=$(echo "$RELEASE_JSON" | jq -r \
 if [ -n "$CHECKSUM_URL" ] && [ "$CHECKSUM_URL" != "null" ]; then
     info "Verifying SHA-256 checksum..."
     EXPECTED_HASH=$(curl -sSL \
-        -H "Authorization: token ${GITHUB_PAT}" \
         -H "Accept: application/octet-stream" \
         "$CHECKSUM_URL" | awk '{print $1}')
 

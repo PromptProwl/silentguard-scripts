@@ -12,13 +12,14 @@ setlocal EnableDelayedExpansion
 REM ─── Configuration ─────────────────────────────────────────────────────────
 set "VERSION=v0.1.0"
 set "GITHUB_REPO=PromptProwl/silentguard-releases"
-set "GITHUB_PAT=PASTE_YOUR_PAT_HERE"
+
+REM Repo is public, so no PAT is needed
 
 set "BINARY_NAME=silentguard-engine-windows.exe"
 set "ASSET_URL=https://api.github.com/repos/%GITHUB_REPO%/releases/tags/%VERSION%"
 
 REM Chrome extension ID that will talk to this host
-set "CHROME_EXTENSION_ID=YOUR_CHROME_EXTENSION_ID"
+set "CHROME_EXTENSION_ID=cmhlaimhneoganidnfcodmplhfeoball"
 
 REM Hugging Face model coordinates
 set "EMBEDDING_REPO=gpahal/bge-m3-onnx-int8"
@@ -78,7 +79,7 @@ REM ─── Step 2: Download the binary package from GitHub Releases ───
 echo [*] Fetching release metadata for %VERSION% from %GITHUB_REPO%...
 
 set "RELEASE_FILE=%CACHE_DIR%\release.json"
-curl -sSL -H "Authorization: token %GITHUB_PAT%" -H "Accept: application/vnd.github+json" "%ASSET_URL%" -o "%RELEASE_FILE%"
+curl -sSL -H "Accept: application/vnd.github+json" "%ASSET_URL%" -o "%RELEASE_FILE%"
 
 REM Extract download URL using PowerShell (avoids jq dependency on Windows)
 for /f "usebackq delims=" %%U in (`powershell -NoProfile -Command ^
@@ -93,7 +94,7 @@ if "%DOWNLOAD_URL%"=="" (
 
 echo [*] Downloading %BINARY_NAME%...
 set "DOWNLOAD_DEST=%CACHE_DIR%\%BINARY_NAME%"
-curl -SL --progress-bar -H "Authorization: token %GITHUB_PAT%" -H "Accept: application/octet-stream" "%DOWNLOAD_URL%" -o "%DOWNLOAD_DEST%"
+curl -SL --progress-bar -H "Accept: application/octet-stream" "%DOWNLOAD_URL%" -o "%DOWNLOAD_DEST%"
 echo [OK] Download complete: %DOWNLOAD_DEST%
 echo.
 
@@ -109,7 +110,7 @@ for /f "usebackq delims=" %%U in (`powershell -NoProfile -Command ^
 if not "%CHECKSUM_URL%"=="" (
     echo [*] Verifying SHA-256 checksum against release asset...
     set "CHECKSUM_FILE=%CACHE_DIR%\%BINARY_NAME%.sha256"
-    curl -sSL -H "Authorization: token %GITHUB_PAT%" -H "Accept: application/octet-stream" "%CHECKSUM_URL%" -o "!CHECKSUM_FILE!"
+    curl -sSL -H "Accept: application/octet-stream" "%CHECKSUM_URL%" -o "!CHECKSUM_FILE!"
 
     for /f "usebackq tokens=1" %%H in ("!CHECKSUM_FILE!") do set "EXPECTED_HASH=%%H"
 
